@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portrait/src/pages/navigation_page.dart';
 import 'package:portrait/src/pages/page1_page.dart';
 import 'package:portrait/src/pages/twitter_page.dart';
  
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Animated',
-      home: Page1Page(),
+      home: NavigationPageR(),
     );
   }
 }
