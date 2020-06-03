@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -48,14 +49,22 @@ class BottomNavigation extends StatelessWidget {
                 //   size: 10,
                 //   color: Colors.red,
                 // ),
-                child: Container(
-                  child: Text('$numero', style: TextStyle(color: Colors.white, fontSize: 7),),
-                  alignment: Alignment.center,
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    shape: BoxShape.circle
+                child: BounceInDown(
+                  from: 10,
+                  animate: (numero > 0) ? true : false,
+                  child: Bounce(
+                    from: 10,
+                    controller: (controller) => Provider.of<_NotificationModel>(context).bounceController = controller,
+                    child: Container(
+                      child: Text('$numero', style: TextStyle(color: Colors.white, fontSize: 7),),
+                      alignment: Alignment.center,
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        shape: BoxShape.circle
+                      ),
+                    ),
                   ),
                 ),
                 ),
@@ -77,9 +86,16 @@ class ButtomFloat extends StatelessWidget {
       backgroundColor: Colors.indigo,
       child: FaIcon(FontAwesomeIcons.play),
       onPressed: () {
-        int numero = Provider.of<_NotificationModel>(context, listen: false).numero;
+
+        final notiModel = Provider.of<_NotificationModel>(context, listen: false);
+        int numero = notiModel.numero;
         numero++;
-        Provider.of<_NotificationModel>(context, listen: false).numero = numero;
+        notiModel.numero = numero;
+
+        if(numero >= 2){
+          final controller = notiModel.bounceController;
+          controller.forward(from: 0.0);
+        }
       },
     );
   }
@@ -88,6 +104,7 @@ class ButtomFloat extends StatelessWidget {
 class _NotificationModel extends ChangeNotifier{
 
   int _numero = 0;
+  AnimationController _bounceController;
 
   int get numero => this._numero;
 
@@ -96,4 +113,9 @@ class _NotificationModel extends ChangeNotifier{
     notifyListeners();
   }
 
+  AnimationController get bounceController => this._bounceController;
+  set bounceController(AnimationController controller){
+    this._bounceController = controller;
+    notifyListeners();
+  }
 }
